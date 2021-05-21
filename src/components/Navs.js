@@ -20,9 +20,6 @@ const Navs = () => {
             <Link to={item.to}>{item.text}</Link>
           </li>
         ))}
-        <li>
-          <Link to="/starred">Go to starred page</Link>
-        </li>
       </ul>
     </div>
   );
