@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import Actorgrid from '../components/actor/Actorgrid';
 import Mainpagelayout from '../components/Mainpagelayout';
+import Showgrid from '../components/show/Showgrid';
 import { APIGet } from '../misc/config';
 
 const Home = () => {
@@ -35,11 +37,17 @@ const Home = () => {
       return <div>no results</div>;
     }
     if (results && results.length > 0) {
-      return results[0].show
-        ? results.map(item => <div key={item.show.id}>{item.show.name}</div>)
-        : results.map(item => (
-            <div key={item.person.id}>{item.person.name}</div>
-          ));
+      console.log("on showgird");
+      return results[0].show ? (
+        
+        <Showgrid data={results} />
+      ) : (
+        <Actorgrid data={results} />
+      );
+      // ? results.map(item => <div key={item.show.id}>{item.show.name}</div>)
+      // : results.map(item => (
+      //     <div key={item.person.id}>{item.person.name}</div>
+      //   ));
     }
     return null;
   };
