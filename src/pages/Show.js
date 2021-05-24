@@ -1,29 +1,37 @@
 import React, { useEffect, useReducer } from 'react';
 import { useParams } from 'react-router-dom';
+import Cast from '../components/show/Cast';
+import Details from '../components/show/Details';
+import Seasons from '../components/show/Seasons';
+import ShowMainData from '../components/show/ShowMainData';
 import { APIGet } from '../misc/config';
 
-const reducer=(prevState,action)=>{
-  switch(action.type){
-    case 'FETCH_SUCCESS':{
-      return {show: action.show,isLoading: false,error: null}
+const reducer = (prevState, action) => {
+  switch (action.type) {
+    case 'FETCH_SUCCESS': {
+      return { show: action.show, isLoading: false, error: null };
     }
-    case 'FETCH_FAILED':{
-      return {...prevState,setIsLoading: false,error: action.error}
+    case 'FETCH_FAILED': {
+      return { ...prevState, isLoading: false, error: action.error };
     }
-    default: return prevState
+    default:
+      return prevState;
   }
-}
+};
 
-const initailState={
-  show : null,
-  setIsLoading : true,
-  error : null
-}
+const initailState = {
+  show: null,
+  isLoading: true,
+  error: null,
+};
 
 const Show = () => {
   const { id } = useParams();
 
-  const [{show,isLoading,error},dispatch]=useReducer(reducer,initailState);
+  const [{ show, isLoading, error }, dispatch] = useReducer(
+    reducer,
+    initailState
+  );
   // const [show, setShow] = useState(null);
   // const [isLoading, setIsLoading] = useState(true);
   // const [error, setError] = useState(null);
@@ -40,7 +48,7 @@ const Show = () => {
         //   }
         // }, 2000);
         if (isMount) {
-          dispatch({type:'FETCH_SUCCESS',show:result})
+          dispatch({ type: 'FETCH_SUCCESS', show: result });
           //below for useState
           // setShow(result);
           // setIsLoading(false);
@@ -48,7 +56,7 @@ const Show = () => {
       })
       .catch(err => {
         if (isMount) {
-          dispatch({type:'FETCH_FAILED',error:err.message})
+          dispatch({ type: 'FETCH_FAILED', error: err.message });
           //below for useState
           // setError(err.message);
           // setIsLoading(false);
@@ -67,7 +75,34 @@ const Show = () => {
   if (error) {
     return <div>an error occured : {error}</div>;
   }
-  return <div>this is a show page</div>;
+  return (
+    
+    <div>
+      <ShowMainData
+        image={show.image}
+        name={show.name}
+        rating={show.rating}
+        summary={show.summary}
+        tags={show.genres}
+      />
+      <div>
+        <h1>details</h1>
+        <Details
+          status={show.status}
+          network={show.network}
+          premiered={show.premiered}
+        />
+      </div>
+      <div>
+        <h1>seasons</h1>
+        <Seasons seasons={show._embedded.seasons} />
+      </div>
+      <div>
+        <h1>Cast</h1>
+        <Cast cast={show._embedded.cast} />
+      </div>
+    </div>
+  );
 };
 
 export default Show;
