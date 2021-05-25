@@ -33,11 +33,11 @@ import { InfoBlock, ShowPageWrapper } from './Show.styled';
 const Show = () => {
   const { id } = useParams();
 
-  //below one line code is added inplace of the commented logic
-  const [show,isLoading,error]=useShow(id);
+  //below one line code is added in place of the commented logic and also here we distructure the output in an object(the curly braces) not in array
+  const {show,isLoading,error}=useShow(id);
   // the commented logic is brought to customhooks in custom-hooks.js
 
-  // const [{ show, isLoading, error }, dispatch] = useReducer(
+  //  const [{ show, isLoading, error }, dispatch] = useReducer(
   //   reducer,
   //   initailState
   // );

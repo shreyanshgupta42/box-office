@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import Actorgrid from '../components/actor/Actorgrid';
+import CustomRadio from '../components/CustomRadio';
 import Mainpagelayout from '../components/Mainpagelayout';
 import Showgrid from '../components/show/Showgrid';
 import { APIGet } from '../misc/config';
 import { useLastQuery } from '../misc/custom-hooks';
+import {
+  RadioInputsWrapper,
+  SearchButtonWrapper,
+  SearchInput,
+} from './Home.styled';
 
 const Home = () => {
   //const [input, setInput] = useState('');        // we changed to the below one later
@@ -39,9 +45,8 @@ const Home = () => {
       return <div>no results</div>;
     }
     if (results && results.length > 0) {
-      console.log("on showgird");
+      console.log('on showgird');
       return results[0].show ? (
-        
         <Showgrid data={results} />
       ) : (
         <Actorgrid data={results} />
@@ -56,38 +61,59 @@ const Home = () => {
 
   return (
     <Mainpagelayout>
-      <input
+      <SearchInput
         type="text"
         placeholder="Search Something Here"
         onChange={onInputChange}
         onKeyDown={onKeyDown}
         value={input}
       />
-      <div>
-        <label htmlFor="shows-search">
-          shows
-          <input
-            id="shows-search"
-            type="radio"
+      <RadioInputsWrapper>
+        <div>
+          <CustomRadio
+            label="Shows"
             value="shows"
             checked={isShowSearch}
             onChange={onRadioChange}
           />
-        </label>
-        <label htmlFor="actors-search">
-          Actors
-          <input
+          {/* below is old label element whose replacement is provided above */}
+          {/* <label htmlFor="shows-search">
+            shows
+            <input
+              id="shows-search"
+              type="radio" 
+              value="shows"
+              checked={isShowSearch}
+              onChange={onRadioChange}
+            />
+          </label> */}
+        </div>
+        <div>
+          <CustomRadio
+            label="Actors"
             id="actors-search"
-            type="radio"
             value="people"
             checked={!isShowSearch}
             onChange={onRadioChange}
           />
-        </label>
-      </div>
-      <button type="button" onClick={onSearch}>
-        Search
-      </button>
+          {/* below is old label element whose replacement is provided above */}
+          {/* <label htmlFor="actors-search">
+            Actors
+            <input
+              id="actors-search"
+              type="radio"
+              value="people"
+              checked={!isShowSearch}
+              onChange={onRadioChange}
+            />
+          </label> */}
+        </div>
+      </RadioInputsWrapper>
+      <SearchButtonWrapper>
+        <button type="button" onClick={onSearch}>
+          Search
+        </button>
+      </SearchButtonWrapper>
       {renderResults()}
     </Mainpagelayout>
   );
