@@ -49,7 +49,7 @@ export function useLastQuery(key = 'lastQuery') {
 const reducer = (prevState, action) => {
   switch (action.type) {
     case 'FETCH_SUCCESS': {
-      return { show: action.show, isLoading: false, error: null };
+      return { isLoading: false, error: null,show: action.show };
     }
     case 'FETCH_FAILED': {
       return { ...prevState, isLoading: false, error: action.error };
@@ -71,7 +71,7 @@ export function useShow(showId) {
 
   useEffect(() => {
     let isMount = true;
-    APIGet(`/shows/${showId}}?embed[]=seasons&embed[]=cast`)
+    APIGet(`/shows/${showId}?embed[]=seasons&embed[]=cast`)
       .then(result => {
         // just a testing of page is loading condition
         // setTimeout(() => {

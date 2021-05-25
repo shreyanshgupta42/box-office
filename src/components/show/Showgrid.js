@@ -18,7 +18,6 @@ const Showgrid = ({ data }) => {
             dispatchStarred({ type: 'ADD', showId: show.id });
           }
         };
-
         return (
           <Showcard
             key={show.id}
