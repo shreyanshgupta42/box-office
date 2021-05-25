@@ -1,74 +1,82 @@
-import React, { useEffect, useReducer } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import Cast from '../components/show/Cast';
 import Details from '../components/show/Details';
 import Seasons from '../components/show/Seasons';
 import ShowMainData from '../components/show/ShowMainData';
-import { APIGet } from '../misc/config';
+import { useShow } from '../misc/custom-hooks';
 import { InfoBlock, ShowPageWrapper } from './Show.styled';
 
-const reducer = (prevState, action) => {
-  switch (action.type) {
-    case 'FETCH_SUCCESS': {
-      return { show: action.show, isLoading: false, error: null };
-    }
-    case 'FETCH_FAILED': {
-      return { ...prevState, isLoading: false, error: action.error };
-    }
-    default:
-      return prevState;
-  }
-};
+// the commented logic is brought to customhooks in custom-hooks.js
 
-const initailState = {
-  show: null,
-  isLoading: true,
-  error: null,
-};
+// const reducer = (prevState, action) => {
+//   switch (action.type) {
+//     case 'FETCH_SUCCESS': {
+//       return { show: action.show, isLoading: false, error: null };
+//     }
+//     case 'FETCH_FAILED': {
+//       return { ...prevState, isLoading: false, error: action.error };
+//     }
+//     default:
+//       return prevState;
+//   }
+// };
+
+// the commented logic is brought to customhooks in custom-hooks.js
+
+// const initailState = {
+//   show: null,
+//   isLoading: true,
+//   error: null,
+// };
 
 const Show = () => {
   const { id } = useParams();
 
-  const [{ show, isLoading, error }, dispatch] = useReducer(
-    reducer,
-    initailState
-  );
-  // const [show, setShow] = useState(null);
-  // const [isLoading, setIsLoading] = useState(true);
-  // const [error, setError] = useState(null);
+  //below one line code is added inplace of the commented logic
+  const [show,isLoading,error]=useShow(id);
+  // the commented logic is brought to customhooks in custom-hooks.js
 
-  useEffect(() => {
-    let isMount = true;
-    APIGet(`/shows/${id}?embed[]=seasons&embed[]=cast`)
-      .then(result => {
-        // just a testing of page is loading condition
-        // setTimeout(() => {
-        //   if (isMount) {
-        //     setShow(result);
-        //     setIsLoading(false);
-        //   }
-        // }, 2000);
-        if (isMount) {
-          dispatch({ type: 'FETCH_SUCCESS', show: result });
-          //below for useState
-          // setShow(result);
-          // setIsLoading(false);
-        }
-      })
-      .catch(err => {
-        if (isMount) {
-          dispatch({ type: 'FETCH_FAILED', error: err.message });
-          //below for useState
-          // setError(err.message);
-          // setIsLoading(false);
-        }
-      });
+  // const [{ show, isLoading, error }, dispatch] = useReducer(
+  //   reducer,
+  //   initailState
+  // );
+  // // const [show, setShow] = useState(null);
+  // // const [isLoading, setIsLoading] = useState(true);
+  // // const [error, setError] = useState(null);
 
-    return () => {
-      isMount = false;
-    };
-  }, [id]);
-  console.log(show);
+  // useEffect(() => {
+  //   let isMount = true;
+  //   APIGet(`/shows/${id}?embed[]=seasons&embed[]=cast`)
+  //     .then(result => {
+  //       // just a testing of page is loading condition
+  //       // setTimeout(() => {
+  //       //   if (isMount) {
+  //       //     setShow(result);
+  //       //     setIsLoading(false);
+  //       //   }
+  //       // }, 2000);
+  //       if (isMount) {
+  //         dispatch({ type: 'FETCH_SUCCESS', show: result });
+  //         //below for useState
+  //         // setShow(result);
+  //         // setIsLoading(false);
+  //       }
+  //     })
+  //     .catch(err => {
+  //       if (isMount) {
+  //         dispatch({ type: 'FETCH_FAILED', error: err.message });
+  //         //below for useState
+  //         // setError(err.message);
+  //         // setIsLoading(false);
+  //       }
+  //     });
+
+  //   return () => {
+  //     isMount = false;
+  //   };
+  // }, [id]);
+  // console.log(show);
 
   if (isLoading) {
     return <div>page is loading</div>;
