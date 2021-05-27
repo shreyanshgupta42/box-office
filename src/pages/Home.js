@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useCallback } from 'react';
 import Actorgrid from '../components/actor/Actorgrid';
 import CustomRadio from '../components/CustomRadio';
 import Mainpagelayout from '../components/Mainpagelayout';
@@ -11,6 +11,26 @@ import {
   SearchInput,
 } from './Home.styled';
 
+ 
+const renderResults = (results) => {
+  if (results && results.length === 0) {
+    return <div>no results</div>;
+  }
+  if (results && results.length > 0) {
+    console.log('on showgird');
+    return results[0].show ? (
+      <Showgrid data={results} />
+    ) : (
+      <Actorgrid data={results} />
+    );
+    // ? results.map(item => <div key={item.show.id}>{item.show.name}</div>)
+    // : results.map(item => (
+    //     <div key={item.person.id}>{item.person.name}</div>
+    //   ));
+  }
+  return null;
+};
+
 const Home = () => {
   //const [input, setInput] = useState('');        // we changed to the below one later
   const [input, setInput] = useLastQuery();
@@ -18,13 +38,13 @@ const Home = () => {
   const [searchOption, setSearchOption] = useState('shows');
   const isShowSearch = searchOption === 'shows';
 
-  const onInputChange = ev => {
+  const onInputChange = useCallback(ev => {
     setInput(ev.target.value);
-  };
+  },[setInput]);
 
-  const onRadioChange = ev => {
+  const onRadioChange = useCallback(ev => {
     setSearchOption(ev.target.value);
-  };
+  },[]);
 
   const onSearch = () => {
     //https://api.tvmaze.com/search/shows?q=men
@@ -40,24 +60,9 @@ const Home = () => {
     }
   };
 
-  const renderResults = () => {
-    if (results && results.length === 0) {
-      return <div>no results</div>;
-    }
-    if (results && results.length > 0) {
-      console.log('on showgird');
-      return results[0].show ? (
-        <Showgrid data={results} />
-      ) : (
-        <Actorgrid data={results} />
-      );
-      // ? results.map(item => <div key={item.show.id}>{item.show.name}</div>)
-      // : results.map(item => (
-      //     <div key={item.person.id}>{item.person.name}</div>
-      //   ));
-    }
-    return null;
-  };
+  //below was created only to check how many times the onInputChange and onKeyDown are rendered otherwise it donot have any other need and can be removed
+  //useWhyDidYouUpdate('Home',{onInputChange,onKeyDown})
+
 
   return (
     <Mainpagelayout>
@@ -114,7 +119,7 @@ const Home = () => {
           Search
         </button>
       </SearchButtonWrapper>
-      {renderResults()}
+      {renderResults(results)}
     </Mainpagelayout>
   );
 };
